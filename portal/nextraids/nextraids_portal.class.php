@@ -1,36 +1,25 @@
 <?php
- /*
- * Project:		EQdkp-Plus
- * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:		2008
- * Date:		$Date: 2012-10-20 12:58:19 +0200 (Sa, 20. Okt 2012) $
- * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
- * @copyright	2006-2011 EQdkp-Plus Developer Team
- * @link		http://eqdkp-plus.com
- * @package		eqdkp-plus
- * @version		$Rev: 12309 $
- *
- * $Id: nextraids_portal.class.php 12309 2012-10-20 10:58:19Z wallenium $
- */
-
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
 class nextraids_portal extends portal_generic {
+	
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'pdh', 'core', 'time', 'config');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
-
+	private $colors 	= array(
+					0 => '#33FF00',
+					1 => '#FFFF00',
+					2 => '#FF0000',
+					3 => ''
+		);
 	protected $path		= 'nextraids';
 	protected $data		= array(
 		'name'			=> 'Nextraids',
-		'version'		=> '3.0.2',
-		'author'		=> 'WalleniuM',
+		'version'		=> '3.0.1',
+		'author'		=> 'WalleniuM Mod by Doom',
 		'contact'		=> EQDKP_PROJECT_URL,
 		'description'	=> 'Shows the future raids in the portal',
 	);
@@ -56,6 +45,7 @@ class nextraids_portal extends portal_generic {
 
 	public function output() {
 		// Load the event data
+		$lastdate = null;
 		$caleventids	= $this->pdh->sort($this->pdh->get('calendar_events', 'id_list', array(false, $this->time->time)), 'calendar_events', 'date', 'asc');
 		$out = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="noborder nextraid_table">';
 
@@ -71,17 +61,34 @@ class nextraids_portal extends portal_generic {
 
 		$count_i = 1;
 		if(is_array($caleventids) && count($caleventids) > 0){
-			foreach($caleventids as $eventid){
+			foreach($caleventids as $eventid)
+			{
+				//doom
+				$query = $this->db->query('SELECT notes FROM `eqdkp10_calendar_events` WHERE id = "'.$eventid.'"');
+				while ($row = $this->db->fetch_row($query)) 
+					$note = $row['notes'];
+				
+				
+				if(substr($note, 0,4) == 'INFO')
+				{
+					$note = substr($note, 4);
+					$end = strpos($note, 'INFO');
+					$note2 = substr($note,0, $end);
+					
+				}
+				else
+					$note = null;
+					
 				$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventid));
 				$raidclosed		= ($this->pdh->get('calendar_events', 'raidstatus', array($eventid)) == '1') ? true : false;
-				if($eventextension['calendarmode'] != 'raid'){
+				
+				$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventid)));
+				if($eventextension['calendarmode'] != 'raid')
 					continue;
-				}
 
 				// switch closed raids if enabled
-				if($this->config->get('nr_nextraids_hideclosed') && $raidclosed){
+				if($this->config->get('nr_nextraids_hideclosed') && $raidclosed)
 					continue;
-				}
 
 				$own_status		= false;
 				$count_status	= $count_array = '';
@@ -117,33 +124,78 @@ class nextraids_portal extends portal_generic {
 				}
 
 				$signinstatus = $this->pdh->get('calendar_raids_attendees', 'html_status', array($eventid, $this->user->data['user_id']));
-				$out .= '<tr class="row1">
-							<td colspan="2">
-								<span style="float:left;font-weight:bold;">
-									'.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventid))).', '.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventid)), false, true).' - '.$this->time->user_date($this->pdh->get('calendar_events', 'time_end', array($eventid)), false, true).'
-								</span>
-								<span style="float: right;width: 24px;">
-									'.$signinstatus.'
+				$out .= '<tr class="row1 nohover">';
+				 
+				//doom
+				if ( $lastdate != $this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventid))) ) 
+				{
+					$out .=	'	<td colspan="2" style="background-color: rgb(4, 15, 22);">
+									<span style="float:left;font-weight:bold;">
+										 
+										'.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventid))).'										
+								</span>';								
+				}						
+				$lastdate = $this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventid)));
+				$out .= '
+				<span style="float: right;width: 24px;">
 								</span>
 							</td>
 						</tr>
-						<tr class="row2">
-							<td valign="middle" align="center" width="44">
+						<tr class="row2 nowrap">
+							<td valign="top" align="center" width="44">
 							<a href="'.$raidplink.'">'.$this->pdh->get('event', 'html_icon', array($eventextension['raid_eventid'], 40)).'</a>
 							</td>
-							<td>';
-				if($raidclosed){
+							<td valign="top">';
+				if($raidclosed)
+				{
 					$out .= '<div style="text-decoration: line-through;">'.$this->pdh->get('event', 'name', array($eventextension['raid_eventid'])).' ('.$eventextension['attendee_count'].') </div>';
-				}else{
-					$out .= '<a href="'.$raidplink.'">'.$this->pdh->get('event', 'name', array($eventextension['raid_eventid'])).' ('.$eventextension['attendee_count'].') </a><br/>';
 				}
+				else
+				{
+					$out .= '<a href="'.$raidplink.'">'.$this->pdh->get('event', 'name', array($eventextension['raid_eventid'])).' </a><br/>'; //('.$eventextension['attendee_count'].')
+				}	
+				//raid note part2
+				if(!empty($note))
+					$out .= '<span style="color: #c0504e; font-variant: small-caps; font-weight: bold;">'.$note2.'</span><br />';
+					
+		
+				$out .= '<b>'.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventid)), false, true).'-'.$this->time->user_date($this->pdh->get('calendar_events', 'time_end', array($eventid)), false, true).'         ';
+				if (is_array($counts))
+				{
+					//$out .= '<div style="text-indent:10px;">';
 
-				if (is_array($counts)){
 					foreach($counts as $countid=>$countdata){
-						$out .= '<span class="status'.$countid.'">'.$raidstatus[$countid].': '.$countdata.'</span><br/>';
+						//eqdkp$out .= '<span class="status'.$countid.'">'.$raidstatus[$countid].': '.$countdata.'</span><br/>';
+						//doom mod
+						$out .= '<font color="'.$this->colors[$countid].'">'.$countdata.'</font>';
+						if ($countid != 3) $out .= '<font> / </font>';
+
 					}
+					$chars = join(',',$this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])));
+					$query = $this->db->query('SELECT DISTINCT eqdkp10_members.member_name, eqdkp10_members.member_class_id as class_id, signup_status, role_name, note
+												FROM eqdkp10_members
+												JOIN eqdkp10_calendar_raid_attendees ON (eqdkp10_calendar_raid_attendees.member_id = eqdkp10_members.member_id)
+												JOIN eqdkp10_roles ON (eqdkp10_roles.role_id = eqdkp10_calendar_raid_attendees.member_role)  
+												WHERE calendar_events_id = "'.$eventid.'" 
+													AND eqdkp10_calendar_raid_attendees.member_id IN ('.$chars.') 
+												LIMIT 0, 1'
+											);
+					$signinstatus = $this->pdh->get('calendar_raids_attendees', 'html_status', array($eventid, $this->user->data['user_id']));
+					while ($row = $this->db->fetch_row($query)) 
+					{
+						$out .= '<br />'.$signinstatus.'<span class="normal  class_'.$row['class_id'].'">'.$row["member_name"].'</span>';
+						if($this->user->check_group(7, false))
+						{
+							$out .= ' ('.$row["role_name"].')';
+							if(!empty($row['note']))
+							{
+								$out .= '<br /></b><b>Notiz:</b><br /> '.wordwrap(substr($row['note'],0,255), 20, "<br />", true);
+							}
+						}
+					}	
 				}
-				$out .= "</td></tr>";
+				$out .= '</div>';
+				$out .= "</tr>";
 
 				// end the foreach if x raids are reached
 				$tillvalue = ($this->config->get('nr_nextraids_limit') > 0) ? $this->config->get('nr_nextraids_limit') : 5;
@@ -153,10 +205,10 @@ class nextraids_portal extends portal_generic {
 				$count_i++;
 			}
 		}else{
-			$out .= '<tr><td colspan="2" class="smalltitle" align="center">'.$this->user->lang('nr_nextraids_noraids').'</td></tr>';
+			$out .= '<span><tr><td colspan="2" class="smalltitle" align="center">'.$this->user->lang('nr_nextraids_noraids').'</td></tr>';
 		}
 
-		$out .= "</table>" ;
+		$out .= "</table>";
 		return $out;
 	}
 }
