@@ -11,54 +11,63 @@
 	<!-- BEGIN date_row -->
 	<!-- BEGIN news_row -->
 		<div class="news">
-			<div class="news_header">
-				<div class="news_category_icon floatRight">
-					<!-- IF S_CATS_ENABLED -->
-					<a href="{date_row.news_row.CATEGORY_LINK}">
-					{date_row.news_row.ICON}
-					</a>
-					<!-- ENDIF -->
-				</div>
-				<div>
-					<div class="news_headline">
-						<h1>{date_row.news_row.HEADLINE}</h1>
-					</div>
-					<hr />
-					<div>
-						<div class="news_author">
-							{date_row.DATE} - {date_row.news_row.SUBMITTED} <!-- IF S_CATS_ENABLED --> &bull; <a href="{date_row.news_row.CATEGORY_LINK}">{date_row.news_row.CATEGORY_NAME}</a><!-- ENDIF -->
-							<!-- IF S_NEWSADM_UPD -->
-							&bull; <a href="javascript:editNews({date_row.news_row.ID});" title="{L_edit_news}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" border="0" alt="edit" /> {L_edit_news}</a>
+			<table align="left" border="0" width="100%">
+			<tr>
+				<td width="130px" align="left" valign="top">						
+					<div class="news_author">
+						<center>
+							<img class="shadow" src="{date_row.news_row.USERPIC}"  width="100" height="100">
+							{date_row.news_row.SUBMITTED}
+							{date_row.news_row.USERGRPS}<br />
+							<!-- IF S_CATS_ENABLED --> 
+							&bull; 
+							<a href="{date_row.news_row.CATEGORY_LINK}">{date_row.news_row.CATEGORY_NAME}</a><!-- ENDIF -->
+						</center>
+					</div>		
+					<div class="news_header">
+						<div class="news_category_icon floatRight">
+							<!-- IF S_CATS_ENABLED -->
+								<a href="{date_row.news_row.CATEGORY_LINK}">
+									{date_row.news_row.ICON}
+								</a>
 							<!-- ENDIF -->
 						</div>
 					</div>
-				</div>
-				
-			</div>
-			
-			
-			<div class="news_content">
-				{date_row.news_row.MESSAGE}
-			</div>			
-
-			<hr />
-			<div class="news_social floatLeft">
-				{date_row.news_row.SOCIAL_BUTTONS}
-			</div>
-			
-			<div class="news_comments floatRight">
-				<!-- IF date_row.news_row.SHOWCOMMENT -->
-				<a href="{EQDKP_ROOT_PATH}viewnews.php{SID}&amp;id={date_row.news_row.ID}#comments" class="button"><img src="{EQDKP_ROOT_PATH}images/glyphs/comments.png" border="0" alt="comments" /> {date_row.news_row.COMMENTS_COUNTER}</a>
-				<!-- ENDIF -->
-				<a href="#top" class="button"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow.png" border="0" alt="up" /><span></span></a>
-			</div>
-			<div class="clear"></div>
-			<!-- IF S_NEWSDETAILS and date_row.news_row.SHOWCOMMENT -->
-			<hr />
-			<a name="comments" id="comments"></a>
-			{date_row.news_row.COMMENT}
-			<!-- ENDIF -->
-
+				</td>
+				<td>
+					<div>
+						<div class="news_headline">
+							<h1><a href="#">{date_row.news_row.HEADLINE}</a></h1>
+							{date_row.DATE}
+						<!-- IF S_NEWSADM_UPD --><br />&bull; <a href="javascript:editNews({date_row.news_row.ID});" title="{L_edit_news}">
+							<img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" border="0" alt="edit" /> {L_edit_news}</a><!-- ENDIF -->
+						</div>
+						<hr />
+						<div>
+						</div>
+					</div>
+					<div class="news_content">
+						{date_row.news_row.MESSAGE}
+					</div>			
+					<hr />
+					<div class="news_social floatLeft">
+						{date_row.news_row.SOCIAL_BUTTONS}
+					</div>
+					<div class="news_comments floatRight">
+						<!-- IF date_row.news_row.SHOWCOMMENT -->
+							<a href="{EQDKP_ROOT_PATH}viewnews.php{SID}&amp;id={date_row.news_row.ID}#comments" class="button"><img src="{EQDKP_ROOT_PATH}images/glyphs/comments.png" border="0" alt="comments" /> {date_row.news_row.COMMENTS_COUNTER}</a>
+						<!-- ENDIF -->
+						<a href="#top" class="button"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow.png" border="0" alt="up" /><span></span></a>
+					</div>
+					<div class="clear"></div>
+					<!-- IF S_NEWSDETAILS and date_row.news_row.SHOWCOMMENT -->
+						<hr />
+						<a name="comments" id="comments"></a>
+						{date_row.news_row.COMMENT}
+					<!-- ENDIF -->
+				</td>
+			</tr>
+			</table>
 		</div>
 		<!-- END news_row -->
 		<!-- END date_row -->
