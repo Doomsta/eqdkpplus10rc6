@@ -5,10 +5,11 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date: 2012-11-19 09:41:23 +0100 (Mon, 19 Nov 2012) $
+ * Date:		$Date: 2013-07-03 09:41:23 +0100 $
  * -----------------------------------------------------------------------
  * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
+ * Castle mod by Doomsta2k7
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
  * @version		$Rev: 12479 $
@@ -127,6 +128,42 @@ class bnet_armory {
 			),
 			3	=> array('spell_nature_healingtouch')		// Druid
 		),
+				'gearSlotNr' => array(
+			'head' => 0, 
+			'neck' => 1,
+			'shoulder' => 2,
+			'back' => 14,
+			'chest' => 4,
+			'shirt' => 3,
+			'tabard' => 18,
+			'wrist' => 8,
+			
+			'hands' => 9,
+			'waist' => 5, //belt
+			'legs' => 6,
+			'feet' => 7,
+			'finger1' => 10,
+			'finger2' => 11,
+			'trinket1' => 12,
+			'trinket2' => 13,
+			
+			'mainHand' => 15,
+			'offHand' => 16,
+			'relik' => 17
+		),
+		'professionIcons' => array(
+			'inscription' => 'inv_inscription_tradeskill01',
+			'3' => 'inv_misc_gem_01', //TODO
+			'skinning' => 'inv_misc_pelt_wolf_01',
+			'mining' => 'inv_pick_02',
+			'alchemy' => 'trade_alchemy',
+			'blacksmithing' => 'trade_blacksmithing',
+			'engineering' => 'trade_engineering',
+			'enchanting' => 'trade_engraving',
+			'herbalism' => 'trade_herbalism',
+			'leatherworking' => 'trade_leatherworking',
+			'tailoring' => 'trade_tailoring'
+		),
 	);
 
 	private $serverlocs		= array(
@@ -244,18 +281,27 @@ class bnet_armory {
 	*/
 	public function a_bnlinks($user, $server, $guild=false){
 		return array(
-			'profil'				=> $this->bnlink($user, $server, 'char'),
-			'talents'				=> $this->bnlink($user, $server, 'talent'),
-			'profession'			=> $this->bnlink($user, $server, 'profession'),
-			'reputation'			=> $this->bnlink($user, $server, 'reputation'),
-			'pvp'					=> $this->bnlink($user, $server, 'pvp'),
-			'achievements'			=> $this->bnlink($user, $server, 'achievements'),
-			'statistics'			=> $this->bnlink($user, $server, 'statistics'),
-			'character-feed'		=> $this->bnlink($user, $server, 'character-feed'),
-			'guild'					=> $this->bnlink($user, $server, 'guild', $guild),
+			//'profil'			=> $this->bnlink($user, $server, 'char'),
+			'profil'			=> 'http://armory.wow-castle.de/character-sheet.xml?r=WoW-Castle+PvE&cn='.$user,
+			//'talents'			=> $this->bnlink($user, $server, 'talent'),
+			'talents'			=> 'http://armory.wow-castle.de/character-talents.xml?r=WoW-Castle+PvE&cn='.$user,
+			//'profession'			=> $this->bnlink($user, $server, 'profession'),
+			'profession'			=> 'http://armory.wow-castle.de/character-sheet.xml?r=WoW-Castle+PvE&cn='.$user,
+			//'reputation'			=> $this->bnlink($user, $server, 'reputation'),
+			'reputation'			=> 'http://armory.wow-castle.de/character-reputation.xml?r=WoW-Castle+PvE&cn='.$user,
+			//'pvp'				=> $this->bnlink($user, $server, 'pvp'),
+			'pvp'				=> 'http://armory.wow-castle.de/character-arenateams.xml?r=WoW-Castle+PvE&cn='.$user,
+			//'achievements'		=> $this->bnlink($user, $server, 'achievements'),
+			'achievements'			=> 'http://armory.wow-castle.de/character-achievements.xml?r=WoW-Castle+PvE&cn='.$user,
+			//'statistics'			=> $this->bnlink($user, $server, 'statistics'),
+			'statistics'			=> 'http://armory.wow-castle.de/character-statistics.xml?r=WoW-Castle+PvE&cn='.$user,
+			//'character-feed'		=> $this->bnlink($user, $server, 'character-feed'),
+			'character-feed'		=> 'http://armory.wow-castle.de/character-feed.xml?r=WoW-Castle+PvE&cn=Doomsta'.$user,
+			//'guild'			=> $this->bnlink($user, $server, 'guild', $guild),
+			'guild'				=> 'http://armory.wow-castle.de/guild-info.xml?r=WoW-Castle+PvE&gn='.$guild,
 
 			// external ones
-			'askmrrobot'			=> $this->bnlink($user, $server, 'askmrrobot'),
+			//'askmrrobot'			=> $this->bnlink($user, $server, 'askmrrobot'),
 		);
 	}
 
@@ -268,17 +314,245 @@ class bnet_armory {
 	* @return bol
 	*/
 	public function character($user, $realm, $force=false){
-		$realm	= $this->ConvertInput($this->cleanServername($realm));
-		$user	= $this->ConvertInput($user);
-		$wowurl	= $this->_config['apiUrl'].sprintf('wow/character/%s/%s?locale=%s&fields=guild,stats,feed,talents,items,reputation,titles,professions,appearance,mounts,pets,achievements,progression,pvp,quests,hunterPets,petSlots', $realm, $user, $this->_config['locale']);
-		$json	= $this->get_CachedData('chardata_'.$user.$realm, $force);		
-		if(!$json && ($this->chardataUpdates < $this->_config['maxChardataUpdates'])){
-			$json	= $this->read_url($wowurl);
-			$this->set_CachedData($json, 'chardata_'.$user.$realm);
-			$this->chardataUpdates++;
+		$user	= ucfirst(strtolower($this->ConvertInput($user)));
+		$url = 'http://armory.wow-castle.de/character-sheet.xml?r=WoW-Castle+PvE&cn='.$user;
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.12) Gecko/20080201 Firefox/2.0.0.12");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Accept-Language: de-de, de;"));
+		$content = curl_exec ($ch);
+		curl_close ($ch);
+		$xml = new SimpleXMLElement($content);
+		
+		$chardata = array();
+		$chardata['lastModified] '] = (string) $xml->characterInfo->character['lastModified']; 
+		$chardata['name'] = (string)  $xml->characterInfo->character['name']; 
+		$chardata['realm'] =  (string) $xml->characterInfo->character['realm'];
+		$chardata['battleGroup'] =  (string) $xml->characterInfo->character['battleGroup'];
+		$chardata['class'] =  (string) $xml->characterInfo->character['classId'];
+		$chardata['race'] = (int) $xml->characterInfo->character['raceId'];
+		$chardata['level'] = (int) $xml->characterInfo->character['level'];
+		$chardata['achievementPoints'] = (int) $xml->characterInfo->character['points'];
+        $chardata['title'] = (string) $xml->characterInfo->character['prefix'];
+        //$chardata['thumbnail'] = NULL;
+		//$chardata['calcClass']  = NULL;
+
+		$chardata['guild'] = array();
+		$chardata['guild']['name'] = (string) $xml->characterInfo->character['guildName'];
+		$chardata['guild']['realm'] = (string) $xml->characterInfo->character['realm'];
+		$chardata['guild']['battlegroup'] = (string) $xml->characterInfo->character['battleGroup'];
+		//$chardata['guild']['level'] = null; //Cata
+		$chardata['guild']['members'] = NULL;
+		//$chardata['guild']['achievementPoints'] = null; //cata
+		$chardata['guild']['emblem']= array();
+		$chardata['guild']['emblem']['icon'] = NULL;
+		$chardata['guild']['emblem']['iconColor'] = NULL;
+		$chardata['guild']['emblem']['border'] = NULL;
+		$chardata['guild']['emblem']['borderColor'] = NULL;
+		$chardata['guild']['emblem']['backgroundColor'] = NULL;
+		/*
+			$chardata['feed'][$i] = array();
+			$chardata['feed'][$i]['type'] = "BOSSKILL";
+			$chardata['feed'][$i]['timestamp'] = 
+			$chardata['feed'][$i]['achievement'] = array();
+			$chardata['feed'][$i]['achievement']['id'] = null;
+			$chardata['feed'][$i]['achievement']['title'] = $feed->entry->title;
+			$chardata['feed'][$i]['achievement']['icon'] = "trade_engineering";
+		*/
+		//gear
+		$gear = array();
+		foreach($xml->characterInfo->characterTab->items->item as $item) {
+			$gear[(string)$item['slot']] = array();
+			$gear[(string)$item['slot']]['id'] = (string)$item['id'];
+			$gear[(string)$item['slot']]['name'] = (string)$item['name'];
+			$gear[(string)$item['slot']]['level'] = (string)$item['level'];
+			
+			$gear['iLevelSum'] += $item['level'];
+		}		
+		$chardata['items']['averageItemLevel'] = null;		
+		$chardata['items']['averageItemLevelEquipped'] = round(($gear['iLevelSum']/17),0);
+		//TODO 2H WEAP $chardata['items']['averageItemLevelEquipped'] = round(($gear['iLevelSum']/16),0);
+		
+		$chardata['items']['head']['id'] = $gear[$this->convert['gearSlotNr']['head']]['id'];
+		$chardata['items']['neck']['id'] = $gear[$this->convert['gearSlotNr']['neck']]['id'];
+		$chardata['items']['shoulder']['id'] = $gear[$this->convert['gearSlotNr']['shoulder']]['id'];		
+		$chardata['items']['back']['id'] = $gear[$this->convert['gearSlotNr']['back']]['id'];
+		$chardata['items']['chest']['id'] = $gear[$this->convert['gearSlotNr']['chest']]['id'];
+		$chardata['items']['shirt']['id'] = $gear[$this->convert['gearSlotNr']['shirt']]['id'];
+		$chardata['items']['tabard']['id'] = $gear[$this->convert['gearSlotNr']['tabard']]['id'];
+		$chardata['items']['wrist']['id'] = $gear[$this->convert['gearSlotNr']['wrist']]['id'];
+		$chardata['items']['hands']['id'] = $gear[$this->convert['gearSlotNr']['hands']]['id'];
+		$chardata['items']['waist']['id'] = $gear[$this->convert['gearSlotNr']['waist']]['id'];
+		$chardata['items']['legs']['id'] = $gear[$this->convert['gearSlotNr']['legs']]['id'];
+		$chardata['items']['feet']['id'] = $gear[$this->convert['gearSlotNr']['feet']]['id'];
+		$chardata['items']['finger1']['id'] = $gear[$this->convert['gearSlotNr']['finger1']]['id'];
+		$chardata['items']['finger2']['id'] = $gear[$this->convert['gearSlotNr']['finger2']]['id'];
+		$chardata['items']['trinket1']['id'] = $gear[$this->convert['gearSlotNr']['trinket1']]['id'];
+		$chardata['items']['trinket2']['id'] = $gear[$this->convert['gearSlotNr']['trinket2']]['id'];
+		$chardata['items']['mainHand']['id'] = $gear[$this->convert['gearSlotNr']['mainHand']]['id'];
+		$chardata['items']['offHand']['id'] = $gear[$this->convert['gearSlotNr']['offHand']]['id'];
+		$chardata['items']['relik']['id'] = $gear[$this->convert['gearSlotNr']['relik']]['id'];
+		
+		$chardata['stats'] = array();
+		$chardata['stats']['health'] =  (string) $xml->characterInfo->characterTab->characterBars->health['effective'];  
+		//powerType
+		$var = (string) $xml->characterInfo->characterTab->characterBars->secondBar['type']; 
+		switch ($var) {
+			case m: //mana
+				$chardata['stats']['powerType'] = 'mana';
+				break;
+			case r: //wut
+				$chardata['stats']['powerType'] = 'rage';
+				break;
+			case e: //energie
+				$chardata['stats']['powerType'] = 'energy';
+				break;    
+			case p: //runenmacht
+				$chardata['stats']['powerType'] = 'runic-power';
+				break;
 		}
-		$chardata	= json_decode($json, true);
-		$errorchk	= $this->CheckIfError($chardata);
+		
+		$chardata['stats']['power'] =  (string)$xml->characterInfo->characterTab->characterBars->secondBar['effective'];
+		//base stats 
+		$chardata['stats']['str'] = (string) $xml->characterInfo->characterTab->baseStats->strength['effective'];  
+		$chardata['stats']['agi'] = (string) $xml->characterInfo->characterTab->baseStats->agility['effective']; 
+		$chardata['stats']['sta'] = (string) $xml->characterInfo->characterTab->baseStats->stamina['effective']; 
+		$chardata['stats']['int'] = (string) $xml->characterInfo->characterTab->baseStats->intellect['effective']; 
+		$chardata['stats']['spr'] = (string) $xml->characterInfo->characterTab->baseStats->spirit['effective'];  
+		
+		//melee
+		$chardata['stats']['mainHandDmgMin'] = (string) $xml->characterInfo->characterTab->melee->mainHandDamage['min'];
+		$chardata['stats']['mainHandDmgMax'] = (string) $xml->characterInfo->characterTab->melee->mainHandDamage['max'];
+		$chardata['stats']['mainHandSpeed'] = (string) $xml->characterInfo->characterTab->melee->mainHandDamage['speed'];
+		$chardata['stats']['mainHandDps'] = (string) $xml->characterInfo->characterTab->melee->mainHandDamage['dps'];
+		$chardata['stats']['mainHandExpertise'] = (string) $xml->characterInfo->characterTab->melee->expertise['value'];
+		
+		$chardata['stats']['offHandDmgMin'] = (string) $xml->characterInfo->characterTab->melee->offHandDamage['min'];
+		$chardata['stats']['offHandDmgMax'] = (string) $xml->characterInfo->characterTab->melee->offHandDamage['max'];
+		$chardata['stats']['offHandSpeed'] = (string) $xml->characterInfo->characterTab->melee->offHandDamage['speed'];
+		$chardata['stats']['offHandDps'] = 	(string) $xml->characterInfo->characterTab->melee->offHandDamage['dps'];
+		$chardata['stats']['offHandExpertise'] = (string) $xml->characterInfo->characterTab->melee->offHandDamage['value'];
+		
+		$chardata['stats']['attackPower'] = (string) $xml->characterInfo->characterTab->melee->power['effective'];
+		$chardata['stats']['hasteRating'] = (string) $xml->characterInfo->characterTab->spell->hasteRating['hasteRating']; //not working
+		$chardata['stats']['crit'] = (string) $xml->characterInfo->characterTab->melee->critChance['percent'];
+		$chardata['stats']['hitPercent'] = (string) $xml->characterInfo->characterTab->melee->hitRating['increasedHitPercent'];
+		$chardata['stats']['arpPercent'] = (string) $xml->characterInfo->characterTab->melee->hitRating['reducedArmorPercent']; //buggy @ castle
+
+		//ranged
+		$chardata['stats']['rangedDmgMin'] = (string) $xml->characterInfo->characterTab->ranged->damage['min'];
+		$chardata['stats']['rangedDmgMax'] = (string) $xml->characterInfo->characterTab->ranged->damage['max'];
+		$chardata['stats']['rangedSpeed'] = (string) $xml->characterInfo->characterTab->ranged->damage['speed'];
+		$chardata['stats']['rangedDps'] = (string) $xml->characterInfo->characterTab->ranged->damage['dps'];
+		$chardata['stats']['rangedExpertise'] = (string) $xml->characterInfo->characterTab->melee->expertise['value'];
+		$chardata['stats']['rangedCrit'] = (string) $xml->characterInfo->characterTab->ranged->critChance['percent'];
+		$chardata['stats']['rangedHitRating'] = (string) $xml->characterInfo->characterTab->ranged->hitRating['percent'];
+		$chardata['stats']['rangedAttackPower'] = (string) $xml->characterInfo->characterTab->ranged->power['effective'];
+		
+		//caster
+		$chardata['stats']['spellPower'] = (string) $xml->characterInfo->characterTab->spell->bonusDamage->holy['value'];
+		$chardata['stats']['spellPen'] = (string) $xml->characterInfo->characterTab->spell->penetration['value'];
+		$chardata['stats']['spellCrit'] = (string) $xml->characterInfo->characterTab->spell->critChance->holy['percent'];
+		$chardata['stats']['spellCritRating'] = (string) $xml->characterInfo->characterTab->spell->critChance['rating'];
+		$chardata['stats']['spellHitPercent'] = (string) $xml->characterInfo->characterTab->spell->hitRating['increasedHitPercent'];
+		$chardata['stats']['spellHitRating'] = (string) $xml->characterInfo->characterTab->spell->hitRating['value'];
+		$chardata['stats']['mana5'] = (string) $xml->characterInfo->characterTab->spell->manaRegen['notCasting'];
+		$chardata['stats']['mana5Combat'] = (string) $xml->characterInfo->characterTab->spell->manaRegen['casting'];
+		
+		//def
+		$chardata['stats']['armor'] = (string) $xml->characterInfo->characterTab->defenses->armor['base'];
+		$chardata['stats']['dodge'] = (string) $xml->characterInfo->characterTab->defenses->dodge['percent'];
+		$chardata['stats']['dodgeRating'] = (string) $xml->characterInfo->characterTab->defenses->dodge['rating'];
+		$chardata['stats']['parry'] = (string) $xml->characterInfo->characterTab->defenses->parry['percent'];
+		$chardata['stats']['parryRating'] = (string) $xml->characterInfo->characterTab->defenses->parry['rating'];
+		$chardata['stats']['block'] = (string) $xml->characterInfo->characterTab->defenses->block['percent'];
+		$chardata['stats']['blockRating'] = (string) $xml->characterInfo->characterTab->defenses->block['rating'];
+		$chardata['stats']['pvpResilienceRating'] = (string) $xml->characterInfo->characterTab->defenses->resilience['value'];
+		
+		$chardata['stats']['mastery'] = null; //cata
+		$chardata['stats']['masteryRating'] = null; //cata
+		$chardata['stats']['pvpPower'] = null;//mop
+		$chardata['stats']['pvpPowerRating'] = null;//mop
+		$chardata['stats']['pvpPowerDamage'] = null;//mop
+		$chardata['stats']['pvpPowerHealing'] = null;//mop
+
+		$chardata['professions'] = array();
+		$chardata['professions']["primary"] = array();
+		for($i=0;$i<4;$i++) 
+		{
+			$chardata['professions']["primary"][$i]["id"] = (string) $xml->characterInfo->characterTab->professions->skill[$i]['id'];
+			$chardata['professions']["primary"][$i]["name"] = (string) $xml->characterInfo->characterTab->professions->skill[$i]['name'];
+			$key = (string) $xml->characterInfo->characterTab->professions->skill[$i]['key'] ;
+			$chardata['professions']["primary"][$i]["icon"] = (string) $this->convert['professionIcons']["$key"];
+			$chardata['professions']["primary"][$i]["rank"] =(string) $xml->characterInfo->characterTab->professions->skill[$i]['value'];
+			$chardata['professions']["primary"][$i]["max"] = (string) $xml->characterInfo->characterTab->professions->skill[$i]['max'];
+			$chardata['professions']["primary"][$i]["recipes"] = array();
+		}
+		/*
+		$chardata['professions']["secondary"]["0"]["id"] = "NULL";
+		$chardata['professions']["secondary"]["0"]["name"] = "NULL";
+		$chardata['professions']["secondary"]["0"]["icon"] = "NULL";
+		$chardata['professions']["secondary"]["0"]["rank"] = "NULL";
+		$chardata['professions']["secondary"]["0"]["max"] = "NULL";
+		$chardata['professions']["secondary"]["0"]["recipes"] = array();
+		*/
+
+		$chardata['reputation'] = array();
+		$chardata['titles'] = array();
+		$chardata['achievements'] = array();
+		$chardata['achievements']['achievementsCompleted']  = array();
+		$chardata['achievements']['achievementsCompletedTimestamp']  = array();
+		$chardata['achievements']['criteria']  = array();
+		$chardata['achievements']['criteriaQuantity']  = array();
+		$chardata['achievements']['criteriaTimestamp']  = array();
+		$chardata['achievements']['criteriaCreated']  = array();
+
+		// talents, glyphs
+        /*        $url = 'http://armory.wow-castle.de/character-talents.xml?r=WoW-Castle+PvE&cn='.$user;
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.12) Gecko/20080201 Firefox/2.0.0.12");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array("Accept-Language: de-de, de;"));
+                $talent_content = curl_exec ($ch);
+                curl_close ($ch);
+                $talent_xml = new SimpleXMLElement($talent_content);
+		*/
+		$chardata['talents'] = array();
+		for($i=0;$i<2;$i++)
+		{
+			$chardata['talents'][$i] = array();
+			$chardata['talents'][$i]['talents'] = array();
+			$chardata['talents'][$i]['glyphs'] = array();
+			//	foreach($talent_xml->characterInfo->talents->talentGroup[$i]->glyphs->glyph as $glyph)
+			//		$chardata['talents'][$i]['glyphs'][utf8_decode($glyph['type'])][] = array("item" => NULL, "glyph" => $glyph['glyph'], "name" => $glyph['name'], "icon" => NULL);
+			$chardata['talents'][$i]['spec'] = array();
+			$chardata['talents'][$i]['spec']['name'] = $xml->characterInfo->characterTab->talentSpecs->talentSpec[$i]['prim'];
+			$chardata['talents'][$i]['spec']['role'] = "NULL";
+			$chardata['talents'][$i]['spec']['backgroundImage'] = "NULL";
+			$chardata['talents'][$i]['spec']['icon'] = $xml->characterInfo->characterTab->talentSpecs->talentSpec[$i]['icon'];
+			$chardata['talents'][$i]['spec']['description'] = null;
+			$chardata['talents'][$i]['spec']['order'] = null;
+			$chardata['talents'][$i]['calcTalent'] = null;
+			$chardata['talents'][$i]['calcSpec'] = null;
+			$chardata['talents'][$i]['calcGlyph'] = null;
+		}
+		
+		$chardata['appearance'] = array();
+		$chardata['mounts'] = array();
+		$chardata['pets'] = array();
+		$chardata['petSlots'] = array();
+		$chardata['progression'] = array();
+		$chardata['pvp'] = array();
+		$chardata['quests'] = array();
+		$chardata['pvp'] = array();
+		$chardata['pvp']['ratedBattlegrounds'] = array();
+		$chardata['pvp']['arenaTeams'] = array();
+		$chardata['pvp']['totalHonorableKills'] = "Null";
+		$chardata['achievement'] = array();
+		print_r ($errorchk);
+		return $chardata;
 		return (!$errorchk) ? $chardata: $errorchk;
 	}
 
@@ -313,7 +587,8 @@ class bnet_armory {
 		return $img_charicon;
 	}
 
-	public function characterIconSimple($race, $gender='0'){
+	public function characterIconSimple($race = '1', $gender='0'){
+	return 'http://eu.battle.net/wow/static/images/2d/profilemain/race/3-1.jpg';
 		return sprintf('http://eu.battle.net/wow/static/images/2d/profilemain/race/%s-%s.jpg', $race, $gender);
 	}
 
@@ -337,6 +612,7 @@ class bnet_armory {
 			$this->set_CachedData($this->read_url($this->_config['apiRenderUrl'].sprintf('%s/%s', $this->_config['serverloc'], $imgfile)), $cached_img, true);
 			$img_charicon	= $this->get_CachedData($cached_img, false, true);
 		}
+		return 'http://eu.battle.net/wow/static/images/2d/profilemain/race/1-0.jpg';
 		return $img_charicon;
 	}
 
