@@ -1,0 +1,98 @@
+
+<script type="text/javascript">
+  function onShoutboxArchiveSearchFocus(input)
+  {
+    if (input.value == '{L_search}...')
+      input.value = '';
+  }
+
+  function onShoutboxArchiveSearchBlur(input)
+  {
+    if (input.value == '')
+      input.value = '{L_search}...';
+  }
+</script>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th class="center">
+      <div style="float:left">
+        <a href="{ACTION}">{L_sb_shoutbox_archive}</a> {S_PAGE_TITLE}
+      </div>
+      <div style="float:right">
+        <form action="{ACTION}" method="post">
+          <input type="text" class="input search" value="{L_search}..." name="search" onfocus="onShoutboxArchiveSearchFocus(this);" onblur="onShoutboxArchiveSearchBlur(this);" />
+          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align: middle;" title="{L_search}" />
+        </form>
+      </div>
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <table width="100%" border="0" cellspacing="1" cellpadding="2">
+        <tr>
+          <td width="150" valign="top">
+            <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline colorswitch">
+              <!-- BEGIN year_row -->
+              <tr>
+                <th class="center">{year_row.YEAR}</th>
+              </tr>
+              <!-- BEGIN month_row -->
+              <tr>
+                <td>
+                  <span style="float:left">
+                    <a href="{year_row.month_row.LINK_VIEW}" class="menu_arrow">{year_row.month_row.MONTH}</a>
+                  </span>
+                  <span style="float:right">
+                    ({year_row.month_row.COUNT})
+                  </span>
+                </td>
+              </tr>
+              <!-- END month_row -->
+              <!-- END year_row -->
+            </table>
+          </td>
+          <td valign="top">
+            <!-- IF S_COUNT gt 0 -->
+            <table width="100%" border="0" cellspacing="1" cellpadding="2" class="border01 colorswitch">
+              <!-- BEGIN shoutbox_row -->
+              <tr>
+                <th align="left">
+                  <!-- IF CAN_DELETE -->
+                  <form action="{ACTION}" method="post">
+                    <span style="float:right">
+                      <!-- IF S_YEAR --><input type="hidden" name="year" value="{S_YEAR}" /><!-- ENDIF S_YEAR -->
+                      <!-- IF S_MONTH --><input type="hidden" name="month" value="{S_MONTH}" /><!-- ENDIF S_MONTH -->
+                      <!-- IF S_SB_SEARCH --><input type="hidden" name="search" value="{S_SB_SEARCH}" /><!-- ENDIF S_SB_SEARCH -->
+                      <input type="hidden" name="delete_id" value="{shoutbox_row.ID}" />
+                      <input type="submit" name="sb_delete" value="{L_delete}" class="liteoption bi_delete" />
+                    </span>
+					{CSRF_TOKEN}
+                  </form>
+                  <!-- ENDIF -->
+                </th>
+              </tr>
+              <tr class="row1">
+                <td>
+                  <span style="float:left">{shoutbox_row.DATE} - {L_sb_written_by} {shoutbox_row.NAME} {L_sb_written_at} {shoutbox_row.TIME}</span>
+                  <br/>
+                  <hr class="noshade" />
+                  <div class="newscontainer">{shoutbox_row.MESSAGE}</div>
+                </td>
+              </tr>
+              <!-- END shoutbox_row -->
+            </table>
+            <!-- ELSE -->
+            <table width="100%" border="0" cellspacing="1" cellpadding="2">
+              <tr><th>&nbsp;</th></tr>
+              <tr><td class="row1">{L_sb_no_entries}</td></tr>
+              <tr><th>&nbsp;</th></tr>
+            </table>
+            <!-- ENDIF S_COUNT -->
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<br/>

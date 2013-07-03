@@ -1,0 +1,45 @@
+<form method="post" action="">
+	<!-- BEGIN tabs -->
+		<div>
+		
+			<!-- BEGIN fieldset -->
+			<!-- IF tabs.fieldset.S_NO_FIELDSET -->
+			{tabs.fieldset.NAME}
+			<!-- ELSE -->
+			<fieldset class="settings gr_{tabs.fieldset.ID}">
+				<legend>{tabs.fieldset.NAME}</legend>
+				<!-- BEGIN field -->
+				<dl>
+					<dt><label>{tabs.fieldset.field.NAME} <!-- IF tabs.fieldset.field.REQUIRED -->*<!-- ENDIF --></label>
+					<br /><span>{tabs.fieldset.field.HELP}</span>
+					</dt>
+					<dd>{tabs.fieldset.field.FIELD}</dd>
+				</dl>
+				<!-- END field -->
+			</fieldset>
+			
+			<!-- ENDIF -->
+			<!-- END fieldset -->
+		</div>
+		<!-- END tabs -->
+	
+	<div id="captcha">
+		<fieldset class="settings">
+			<legend>{L_lib_captcha_head}</legend>
+			<dl>
+				<dt>
+					<label>{L_lib_captcha_head} *</label><br /><span>{L_lib_captcha_insertword}</span>
+				</dt>
+				<dd><div id="recaptcha_image" style="float:left; cursor:pointer;" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}"></div><img src="{EQDKP_ROOT_PATH}images/global/update.png" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}" alt="{L_lib_captcha_reload}" style="cursor:pointer; padding-top:20px;" /><div style="clear:both;"></div>
+				<input name="recaptcha_response_field" type="text" id="recaptcha_response_field" style="width:300px; margin-top:5px;" class="input"/>
+				{FV_CAPTCHA}
+				{CAPTCHA}</dd>
+			</dl>
+		</fieldset>
+	</div>
+	
+	<input type="submit" name="save" class="mainoption bi_ok"  value="{L_gr_submit_request}" />
+	<input type="reset" name="reset" class="liteoption bi_reset" value="{L_reset}"/>
+	
+{CSRF_TOKEN}
+</form>

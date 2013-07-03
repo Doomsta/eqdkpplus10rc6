@@ -1,0 +1,22 @@
+<form name="gr_settings" action="{ACTION}" method="post">
+  <fieldset class="settings">
+    <legend>{L_sb_header_general}</legend>
+    <div id="sb_settings_general">
+      <dl>
+        <dt>
+          <label>{L_sb_use_users}</label><br/>
+          <span>{L_sb_use_users_help}</span>
+        </dt>
+        <dd>
+          <label>{F_USE_USERS}</label>
+        </dd>
+      </dl>
+    </div>
+    <br />
+	  <div class="center">
+      <input type="submit" name="sb_save" value="{L_save}" class="mainoption bi_ok" />
+      <input type="reset" name="sb_reset" value="{L_reset}" class="liteoption bi_reset" />
+    </div> 
+  </fieldset>
+{CSRF_TOKEN}
+</form>

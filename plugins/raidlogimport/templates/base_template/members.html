@@ -1,0 +1,52 @@
+<form method="post" action="{ACTION}" id="rli_import_form">
+	<div id='rli_nav_tabs'>
+		<ul>
+			<li><a href="#raids" id="rli_nav_raids"><span>{L_raids}</span></a><input type="hidden" name="checkraid" value="{L_update}" disabled="disabled" /></li>
+			<li><a href="#members" id="rli_nav_members"><span>{L_members}</span></a><input type="hidden" name="checkmem" value="{L_update}" disabled="disabled" /></li>
+			<li><a href="#items" id="rli_nav_items"><span>{L_items}</span></a><input type="hidden" name="checkitem" value="{L_update}" disabled="disabled" /></li>
+			<!-- IF not S_DEACTIVATE_ADJ -->
+				<li><a href="#adjustments" id="rli_nav_adjustments"><span>{L_adjustments}</span></a><input type="hidden" name="checkadj" value="{L_update}" disabled="disabled" /></li>
+			<!-- ENDIF -->
+			<li><a href="#finish" id="rli_nav_finish"><span>{L_rli_finish}</span></a><input type="hidden" name="insert" value="{L_update}" disabled="disabled" /></li>
+		</ul>
+		<div id="raids">
+			<span><img src="{EQDKP_IMAGE_PATH}global/loading.gif" alt="..." /> {L_rli_loading} </span>
+		</div>
+		<div id="members">
+			<!-- INCLUDE raid_display.html -->
+			<table width="100%" border="0" cellspacing="1" cellpadding="1" id="member_form" class="colorswitch">
+			<!-- IF DETAIL_RAIDLIST -->
+				<!-- INCLUDE detailed_members_raids.html -->
+			<!-- ELSE -->
+				<!-- INCLUDE members_raids.html -->
+			<!-- ENDIF -->
+			  <tr class="row2">
+				<td colspan="2">
+					<input type="button" id="add_mem_button" value="{L_rli_add_mem}" class="mainoption bi_new" />
+				</td>
+				<td class="row2" colspan="99">&nbsp;</td>
+			  </tr>
+			</table>
+			<table width="100%" border="0" cellspacing="1" cellpadding="1">
+			  <tr>
+				<th align="center" colspan="8">
+				   <input type="submit" name="checkmem" value="{L_update}" class="mainoption" />
+				   <input type="submit" name="checkitem" value="{L_rli_go_on}" class="mainoption" />
+				</th>
+			  </tr>
+			</table>
+		</div>
+		<div id="items">
+			<span><img src="{EQDKP_IMAGE_PATH}global/loading.gif" alt="..." /> {L_rli_loading} </span>
+		</div>
+	</div>
+</form>
+<!-- IF CONTEXT_MENU -->
+<div id="myrcm" class="rli_rcm" style="display: none;">
+	<ul>
+		<li id="rli_add_dmem"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="" />{L_rli_add_time}</li>
+		<li id="rli_del_dmem"><img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="" />{L_rli_del_time}</li>
+		<li id="rli_swi_dmem"><img src="{EQDKP_IMAGE_PATH}global/update.png" alt="" />{L_rli_standby_switch}</li>
+	</ul>
+</div>
+<!-- ENDIF -->

@@ -1,0 +1,75 @@
+#tsbody{
+    background-color:transparent; /* Background color */
+    margin:0;
+    padding:0;
+}
+
+#tsbanner{
+}
+
+#tsbody h2{
+    margin-top:5px; /* Server name distance to the top */
+    margin-bottom:5px; /* Server name to the bottom */
+}
+
+#tsbody h3{
+    margin-top:5px; /* IP distance to the top */
+    margin-bottom:10px; /* IP distance to the bottom */
+}
+
+#tsbody h3 a{
+    text-decoration:none;
+    padding:0;
+}
+
+
+.useron{
+    margin-top:10px; /* User online distance to the top */
+    margin-bottom:10px; /* User online distance to the bottom */
+}
+
+
+.tsca{
+    float:left;
+    min-width:20px;
+}
+
+.tsna{
+    float:left;
+    min-width:20px;
+}
+
+#legend h3{
+    margin-top:15px; /* Legend headline distance to the top */
+    margin-bottom:5px; /* Legend headline distance to the bottom */
+}
+
+
+.tsle{
+    min-width:20px;
+    float:left;
+}
+
+#ts3stats h3{
+    margin-top:15px; /* Statistic headline distance to the top */
+    margin-bottom:5px; /* Statistic headline distance to the bottom */
+}
+
+#ts3stats table td{
+    text-align:left;
+    margin-top:0;
+    margin-bottom:0;
+    padding-top:0;
+    padding-bottom:0;
+
+}
+
+
+.tsleer{
+    width:20px;
+    float:left;
+}
+
+#tscont{
+    text-align:left;
+}

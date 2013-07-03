@@ -1,0 +1,86 @@
+
+<script type="text/javascript">
+  function onShoutboxArchiveSearchFocus(input)
+  {
+    if (input.value == '{L_search}...')
+      input.value = '';
+  }
+
+  function onShoutboxArchiveSearchBlur(input)
+  {
+    if (input.value == '')
+      input.value = '{L_search}...';
+  }
+</script>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th>
+      <div style="float:left">
+        <a href="{ACTION}">{L_shoutbox} {L_sb_manage_archive}</a> {SB_PAGE_TITLE}
+      </div>
+      <div style="float:right">
+        <form action="{ACTION}" method="post">
+          <input type="text" class="input search" value="{L_search}..." name="search" onfocus="onShoutboxArchiveSearchFocus(this);" onblur="onShoutboxArchiveSearchBlur(this);" />
+          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_search}" />
+        </form>
+      </div>
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <table width="100%" border="0" cellspacing="1" cellpadding="2">
+        <tr>
+          <td width="150" valign="top">
+            <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline colorswitch">
+              <!-- BEGIN year_row -->
+              <tr>
+                <th class="center">{year_row.YEAR}</th>
+              </tr>
+              <!-- BEGIN month_row -->
+              <tr>
+                <td>
+                  <span style="float:left">
+                    <a href="{year_row.month_row.LINK_VIEW}" class="menu_arrow">{year_row.month_row.MONTH}</a>
+                  </span>
+                  <span style="float:right">
+                    ({year_row.month_row.COUNT})
+                  </span>
+                </td>
+              </tr>
+              <!-- END month_row -->
+              <!-- END year_row -->
+            </table>
+          </td>
+          <td>
+            <form method="post" action="{ACTION}" id="sb_table">
+              <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+                <!-- IF PAGINATION -->
+                <tr class="row2">
+                  <td class="center" colspan="5">{PAGINATION}</td>
+                </tr>
+                <!-- ENDIF PAGINATION -->
+                {SB_TABLE}
+                <tr>
+                  <th colspan="5">
+                    <input name="start" type="hidden" value="{START}" />
+                    <input type="submit" name="sb_delete" value="{L_delete}" class="mainoption bi_delete" />
+                    <input type="reset" name="sb_reset" value="{L_reset}" class="liteoption bi_reset" />
+                  </th>
+                </tr>
+                <!-- IF PAGINATION -->
+                <tr class="row2">
+                  <td class="center" colspan="5">{PAGINATION}</td>
+                </tr>
+                <!-- ENDIF PAGINATION -->
+              </table>
+            </form>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<br/>
+
+<!-- INCLUDE about_footer.html -->

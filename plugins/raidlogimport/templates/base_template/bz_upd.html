@@ -1,0 +1,44 @@
+<form method="post" action="{ACTION}" id="form_rli_bz">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="colorswitch">
+      <tr>
+      	<th align="center" width="100%" colspan="8">{L_BZ_UPD}</th>
+      </tr>
+      <tr>
+      	<th>{L_TYPE}</th><th>{L_STRING}</th><th>{L_NOTE_EVENT}</th><th>{L_TIMEBONUS}</th><th>{L_BONUS}</th><!-- IF S_DIFF --><th>{L_DIFF}</th><!-- ENDIF --><th>{L_TOZONE}</th><th>{L_SORT}</th>
+      </tr>
+      <!-- BEGIN upd_list -->
+      <tr>
+      	<td><select name="type[{upd_list.ID}]" id="type_{upd_list.ID}" class="boss_zone_type">
+      		<option value="boss" {upd_list.BSELECTED}>{L_BOSS}</option>
+      		<option value="zone" {upd_list.ZSELECTED}>{L_ZONE}</option>
+      		</select>
+      	</td>
+      	<td><input type="text" name="string[{upd_list.ID}]" value="{upd_list.STRING}" /></td>
+      	<td><!-- IF S_BOSSEVENT -->{upd_list.EVENTS}<!-- ELSE -->
+				<div id="event_{upd_list.ID}" class="<!-- IF upd_list.ZSELECTED -->bz_show<!-- ELSE -->bz_hide<!-- ENDIF -->">{upd_list.EVENTS}</div>
+				<div id="note_{upd_list.ID}" class="<!-- IF upd_list.BSELECTED -->bz_show<!-- ELSE -->bz_hide<!-- ENDIF -->">
+					<input type="text" name="note[{upd_list.ID}]" value="{upd_list.NOTE}" />
+				</div>
+			<!-- ENDIF -->
+		</td>
+      	<td align="center"><input type="text" name="timebonus[{upd_list.ID}]" value="{upd_list.TIMEBONUS}" size="5" /></td>
+		<td>
+			<div id="bonus_{upd_list.ID}" class="<!-- IF upd_list.ZSELECTED -->bz_hide<!-- ELSE -->bz_show<!-- ENDIF -->">
+				<input type="text" name="bonus[{upd_list.ID}]" value="{upd_list.BONUS}" size="5" />
+			</div>
+		</td>
+		<!-- IF S_DIFF --><td>{upd_list.DIFF_ARRAY}</td><!-- ENDIF -->
+      	<td>
+			<div id="tozone_{upd_list.ID}" class="<!-- IF upd_list.ZSELECTED -->bz_hide<!-- ELSE -->bz_show<!-- ENDIF -->">
+				{upd_list.ZONE_ARRAY}
+			</div>
+		</td>
+      	<td align="center"><input type="text" name="sort[{upd_list.ID}]" value="{upd_list.SORT}" size="5" /></td>
+      </tr>
+      <!-- END upd_list -->
+      <tr>
+      	<th colspan="8"><input type="submit" name="save" value="{L_SAVE}" class="mainoption" /></th>
+      </tr>
+    </table>
+{CSRF_TOKEN}
+</form>

@@ -1,0 +1,35 @@
+<form action='{ACTION}' method='post'>
+	<div id='rli_nav_tabs'>
+		<ul>
+			<li><a href="#raids" id="rli_nav_raids"><span>{L_raids}</span></a><input type="hidden" name="checkraid" value="{L_update}" disabled="disabled" /></li>
+			<li><a href="#members" id="rli_nav_members"><span>{L_members}</span></a><input type="hidden" name="checkmem" value="{L_update}" disabled="disabled" /></li>
+			<li><a href="#items" id="rli_nav_items"><span>{L_items}</span></a><input type="hidden" name="checkitem" value="{L_update}" disabled="disabled" /></li>
+			<!-- IF not S_DEACTIVATE_ADJ -->
+				<li><a href="#adjustments" id="rli_nav_adjustments"><span>{L_adjustments}</span></a><input type="hidden" name="checkadj" value="{L_update}" disabled="disabled" /></li>
+			<!-- ENDIF -->
+			<li><a href="#finsh" id="rli_nav_finish"><span>{L_rli_finish}</span></a><input type="hidden" name="insert" value="{L_update}" disabled="disabled" /></li>
+		</ul>
+		<div id="raids">
+				<span><img src="{EQDKP_IMAGE_PATH}global/loading.gif" alt="..." /> {L_rli_loading} </span>
+		</div>
+		<div id="members">
+				<span><img src="{EQDKP_IMAGE_PATH}global/loading.gif" alt="..." /> {L_rli_loading} </span>
+		</div>
+		<div id="items">
+				<span><img src="{EQDKP_IMAGE_PATH}global/loading.gif" alt="..." /> {L_rli_loading} </span>
+		</div>
+		<div id="adjustments">
+				<span><img src="{EQDKP_IMAGE_PATH}global/loading.gif" alt="..." /> {L_rli_loading} </span>
+		</div>
+		<div id="finish">
+			<table width="100%" border="0" cellpadding="2" cellspacing="1">
+				<tr>
+					<th>{L_rli_imp_no_suc}</th>
+				</tr>
+				<tr class="row1">
+					<td>{CHECK}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</form>

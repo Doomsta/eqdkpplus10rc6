@@ -1,0 +1,36 @@
+<!-- IF S_GERMAN -->
+<div class="bluebox roundbox">
+	<div class="icon_info">{L_MANUAL}</div>
+</div>
+<br />
+<!-- ENDIF -->
+<form action="{ACTION}" method="post">
+{TAB_JS}
+<div id="rli_config"><ul>
+<!-- BEGIN holder -->
+	<li><a href="#rli_config-{holder.NUM}"><span>{holder.TITLE}</span></a></li>
+<!-- END holder -->
+</ul>
+
+
+<!-- BEGIN holder -->
+  <div id="rli_config-{holder.NUM}">
+	<fieldset class="settings">
+		<legend>{holder.TITLE}</legend>
+		<!-- BEGIN config -->
+		<dl>
+			<dt>
+				<label>{holder.config.NAME}</label>
+			</dt>
+			<dd>{holder.config.VALUE}</dd>
+		</dl>
+		<!-- END config -->
+	</fieldset>
+	</div>
+<!-- END holder -->
+</div>
+<div class="contentFooter">
+	<input type="submit" name="upd" value="{L_SAVE}" class="mainoption bi_ok" /> <input type="reset" name="reset" value="{L_reset}" class="liteoption bi_reset" />
+</div>
+{CSRF_TOKEN}
+</form>

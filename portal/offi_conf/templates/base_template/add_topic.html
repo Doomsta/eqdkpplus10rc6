@@ -1,0 +1,29 @@
+<form action='{ACTION}' method='post'>
+	<fieldset class="mediumsettings settings">
+		<legend>{L_oc_add_topic}</legend>
+		<dl>
+			<dt><label>{L_oc_topic_name}:</label></dt>
+			<dd><input type="text" name="t_name" value="{TOPIC_NAME}" class="input" size="30" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_oc_topic_time}:</label></dt>
+			<dd><input type="text" name="t_time" value="{TOPIC_TIME}" class="input" size="4" maxlength="3" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_oc_topic_posi}:</label></dt>
+			<dd><input type="text" name="t_posi" value="{TOPIC_POSI}" class="input" size="3" maxlength="2" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_oc_topic_desc}:</label></dt>
+			<dd><textarea name="t_desc" rows="4" cols="45">{TOPIC_DESC}</textarea></dd>
+		</dl>
+		
+	</fieldset>
+	
+	<input type="submit" name="upd" value="{L_save}" class="mainoption bi_ok" />
+	<!-- IF DELETE -->
+	<input type="submit" name="del" value="{L_delete}" class="mainoption bi_delete" />
+	<input type="hidden" name="id" value="{TOPIC_ID}" />
+	<!-- ENDIF -->
+	{CSRF_TOKEN}
+</form>

@@ -1,0 +1,105 @@
+	<!-- IF S_CLOSED -->
+	<div class="errorbox roundbox">
+		<div class="closed">{L_gr_closed}</div>
+	</div>
+	<br />
+	<!-- ENDIF -->
+	<div class="bluebox roundbox">
+		<div class="{STATUS_ICON}">{STATUS_TEXT}</div>
+	</div>
+	<br />
+	
+<style type="text/css">
+.bi_close{
+	background:url({EQDKP_IMAGE_PATH}/calendar/closed_s.png) no-repeat 2px center;
+	text-indent:20px;
+}
+.bi_open{
+	background:url({EQDKP_IMAGE_PATH}/calendar/open.png) no-repeat 2px center;
+	text-indent:20px;
+}
+</style>
+	
+<div id='gr_view'>
+	<ul>
+		<li><a href='#gr_request'><span>{L_gr_viewlink_subject}</span></a></li>
+		<!-- IF S_VOTE -->
+			<li><a href='#gr_vote'><span>{L_gr_vote}</span></a></li>
+		<!-- ENDIF -->
+		<!-- IF S_INTERNAL_COMMENTS -->
+			<li><a href='#gr_comments'><span>{L_gr_internal_comments} ({INTERNAL_COMMENT_COUNTER})</span></a></li>
+		<!-- ENDIF -->
+	</ul>
+	
+	<div id="gr_request">
+	<!-- IF S_IS_GR_ADMIN -->
+	<form method="post">
+		<fieldset class="settings">
+			<legend><img src="{EQDKP_IMAGE_PATH}global/admin_flag.png" alt="{L_admin}" /> {L_gr_manage_request}</legend>
+			<dl>
+				<dt><label>{L_status}</label>
+				<br /><span>{L_gr_status_help}</span>
+				</dt>
+				<dd>{STATUS_DD}
+					<textarea name="gr_status_text" style="width:95%" rows="4"></textarea>
+					<br /><input type="submit" name="status_change" value="{L_gr_change_status}" class="mainoption bi_ok"/>
+				</dd>
+				
+			</dl>
+			<dl>
+				<dt><label>{L_gr_close}</label>
+				</dt>
+				<dd><!-- IF S_CLOSED --><input type="submit" name="open" value="{L_gr_open_request}" class="mainoption bi_open"/><!-- ELSE --> <input type="submit" name="close" value="{L_gr_close}" class="mainoption bi_close"/><!-- ENDIF --></dd>
+			</dl>
+		</fieldset>
+	{CSRF_TOKEN}
+	</form>
+	<!-- ENDIF -->
+	
+<!-- BEGIN tabs -->
+		<div>
+			<!-- BEGIN fieldset -->
+			<!-- IF tabs.fieldset.S_NO_FIELDSET -->
+			{tabs.fieldset.NAME}
+			<!-- ELSE -->
+			<fieldset class="settings" class="settings gr_{tabs.fieldset.ID}">
+				<legend>{tabs.fieldset.NAME}</legend>
+				<!-- BEGIN field -->
+				<dl>
+					<dt><label>{tabs.fieldset.field.NAME} <!-- IF tabs.fieldset.field.REQUIRED -->*<!-- ENDIF --></label>
+					<br /><span>{tabs.fieldset.field.HELP}</span>
+					</dt>
+					<dd>{tabs.fieldset.field.FIELD}</dd>
+				</dl>
+				<!-- END field -->
+			</fieldset>
+			
+			<!-- ENDIF -->
+			<!-- END fieldset -->
+		</div>
+		<!-- END tabs -->
+		
+		{COMMENTS}
+	</div>
+	
+	<!-- IF S_VOTE -->
+	<div id="gr_vote">
+		<form method="post">
+		<div><!-- IF not S_HAS_VOTED --><div style="float:left;"><input type="radio" value="yes" name="gr_vote" /></div><!-- ENDIF --><div style="width:90%; float: left; margin-left: 20px; margin-bottom: 20px;">{VOTE_YES}</div></div>
+		<div class="clear"></div>
+		<div><!-- IF not S_HAS_VOTED --><div style="float:left;"><input type="radio" value="no" name="gr_vote" /></div><!-- ENDIF --><div style="width:90%; float: left; margin-left: 20px; margin-bottom: 20px;">{VOTE_NO}</div></div>
+		<div class="clear"></div>
+		<!-- IF not S_HAS_VOTED -->
+		{CSRF_TOKEN}
+		<input type="submit" name="vote" value="{L_gr_vote_button}" class="mainoption bi_ok"/>
+		<!-- ENDIF -->
+		</form>
+	</div>
+	<!-- ENDIF -->
+	
+	<!-- IF S_INTERNAL_COMMENTS -->
+	<div id="gr_comments">
+		{INTERNAL_COMMENTS}
+	</div>
+	<!-- ENDIF -->
+</div>

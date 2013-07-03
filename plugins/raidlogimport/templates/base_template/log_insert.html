@@ -1,0 +1,16 @@
+<form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+	<tr>
+		<th colspan="2">{L_DATA_SOURCE}</th>
+	</tr>
+	<tr>
+		<td width="50%" align="center"><input type="button" id="show_log_form" value="{L_INSERT}" class="mainoption" /></td>
+		<td width="50%" align="center"><input type="submit" name="checkraid" value="{L_CONTINUE_OLD}" class="mainoption" {DISABLED} /></td>
+	</tr>
+	<tr id="log_form" style="display:none">
+		<td colspan="2" align="center">&nbsp;<br /><textarea name="log" rows="20" id="log" style="width: 99%" class="post"></textarea><br />
+		<input type="submit" name="checkraid" value="{L_SEND}" class="mainoption" /></td>
+	</tr>
+	<tr><th colspan="2">&nbsp;</th></tr>
+	</table>
+</form>
