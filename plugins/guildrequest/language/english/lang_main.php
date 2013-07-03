@@ -36,7 +36,7 @@ $lang = array(
   'gr_comment'						=> 'Write public comment',
   
   'gr_plugin_not_installed'			=> 'The GuildRequest-Plugin is not installed.',
-  'gr_select_options'				=> 'Options (1 pro Zeile)',
+  'gr_select_options'				=> 'Options (1 per line)',
   'gr_required'						=> 'Mandatory',
   'gr_delete_selected_fields'		=> 'Delete selected fields',
   'gr_types'						=> array(
@@ -75,6 +75,7 @@ $lang = array(
   'gr_send_notification_mails'		=> 'Send Notification Email on new application',
   'gr_closed'						=> 'This application is closed.',
   'gr_notification_subject'			=> 'New application',
+  'gr_jgrowl_notifications'			=> 'Show PopUp Notifications',
 );
 
 ?>

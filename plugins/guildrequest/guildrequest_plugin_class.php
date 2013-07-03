@@ -38,10 +38,10 @@ class guildrequest extends plugin_generic
     return array_merge(parent::$shortcuts, $shortcuts);
   }
 
-  public $version    = '0.1.8';
+  public $version    = '0.1.10';
   public $build      = '';
   public $copyright  = 'GodMod';
-  public $vstatus    = 'Alpha';
+  public $vstatus    = 'Beta';
 
   /**
     * Constructor
@@ -203,6 +203,7 @@ class guildrequest extends plugin_generic
           'link'  => 'plugins/guildrequest/addrequest.php'.$this->SID,
           'text'  => $this->user->lang('gr_add'),
           'check' => 'u_guildrequest_add',
+		  'signedin' => 0,
         ),
 		2 => array (
           'link'  => 'plugins/guildrequest/listrequests.php'.$this->SID,
@@ -210,7 +211,6 @@ class guildrequest extends plugin_generic
           'check' => 'u_guildrequest_view',
         ),
     );
-	if ($this->user->check_auth('u_guildrequest_add', false) && $this->user->check_group(2, false)) unset($main_menu[1]);
 
     return $main_menu;
   }
@@ -225,6 +225,13 @@ class guildrequest extends plugin_generic
 			'default'	=> 0,
 			'name'		=> 'gr_send_notification_mails',
 			'language'	=> 'gr_send_notification_mails',
+		),
+		
+		'gr_jgrowl_notifications'	=> array(
+			'fieldtype'	=> 'checkbox',
+			'default'	=> 0,
+			'name'		=> 'gr_jgrowl_notifications',
+			'language'	=> 'gr_jgrowl_notifications',
 		)),
 	);
 	return $settings;

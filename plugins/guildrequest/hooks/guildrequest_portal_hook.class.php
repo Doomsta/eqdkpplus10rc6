@@ -30,7 +30,7 @@ if (!class_exists('guildrequest_portal_hook'))
   class guildrequest_portal_hook extends gen_class
   {
     /* List of dependencies */
-    public static $shortcuts = array('user', 'pdh', 'tpl');
+    public static $shortcuts = array('user', 'pdh', 'tpl', 'core');
 
 	/**
     * hook_portal
@@ -52,12 +52,18 @@ if (!class_exists('guildrequest_portal_hook'))
 					$intOpen++;
 				}
 			}
+			
 			$text = sprintf($this->user->lang('gr_notification'), $intNew);
 			if($intOpen && $this->user->check_auth('a_guildrequest_manage', false)) $text .= ', '.sprintf($this->user->lang('gr_notification_open'), $intOpen);
 			
 			$this->tpl->assign_block_vars('personal_area_addition', array(
 				'TEXT' => '<img src="'.$this->root_path.'plugins/guildrequest/images/adminmenu/guildrequest.png" alt="GuildRequest" /><a href="'.$this->root_path.'plugins/guildrequest/listrequests.php'.$this->SID.'"> '. $text.'</a>',
 			));
+			
+			$arrGuildrequestSettings = $this->pdh->get('user', 'plugin_settings', array($this->user->id, 'guildrequest'));
+			if (isset($arrGuildrequestSettings['gr_jgrowl_notifications']) && $arrGuildrequestSettings['gr_jgrowl_notifications'] && $intNew){
+				$this->core->message('<a href="'.$this->root_path.'plugins/guildrequest/listrequests.php'.$this->SID.'">'.$text.'</a>', $this->user->lang('guildrequest'));
+			}
 		}
 	}
   }

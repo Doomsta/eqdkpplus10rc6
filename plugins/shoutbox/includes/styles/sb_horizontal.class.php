@@ -136,9 +136,9 @@ if (!class_exists("sb_horizontal"))
 
           // output date as well as User and text
           $htmlOut .= $this->pdh->geth('shoutbox', 'date', array($shoutbox_id, $this->config->get('sb_show_date'))).
-                      '<br/>'.
+                      '<br/><b>'.
                       $this->pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)).
-                      '</td><td style="padding-left: 7px;">'.
+                      '</b></td><td style="padding-left: 7px;">'.
                       $this->pdh->geth('shoutbox', 'text', array($shoutbox_id, $root_path));
 
           $htmlOut .= '  </td>

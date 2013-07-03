@@ -67,7 +67,7 @@ DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 	`request_id` INT(10) NOT NULL,
 	`user_id` INT(10) NOT NULL,
 	`lastvisit` INT(10) NOT NULL,
-	PRIMARY KEY (`request_id`),
+	PRIMARY KEY (`request_id`, `user_id`),
 	INDEX `request_id` (`request_id`),
 	INDEX `user_id` (`user_id`)
 )

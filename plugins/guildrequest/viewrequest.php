@@ -200,7 +200,7 @@ class guildrequestViewrequest extends page_generic
 		$row['options'] = unserialize($row['options']);
 		
 		//Close previous group
-		if ($row['type'] == 3 || $row['type'] == 4){
+		if ($row['type'] == 3){
 			$blnGroupOpen = false;
 			$intGroup++;
 		}
@@ -215,7 +215,7 @@ class guildrequestViewrequest extends page_generic
 			}
 			$this->tpl->assign_block_vars('tabs.fieldset.field', array(
 					'NAME'			=> $row['name'],
-					'FIELD'			=> isset($arrContent[$row['id']]) ? $this->autolink($arrContent[$row['id']],array("target"=>"_blank")) : '',
+					'FIELD'			=> isset($arrContent[$row['id']]) ? $this->autolink(nl2br($arrContent[$row['id']]),array("target"=>"_blank")) : '',
 			));
 		}
 		

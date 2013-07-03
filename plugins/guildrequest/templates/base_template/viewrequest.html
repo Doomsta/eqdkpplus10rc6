@@ -59,22 +59,24 @@
 <!-- BEGIN tabs -->
 		<div>
 			<!-- BEGIN fieldset -->
-			<!-- IF tabs.fieldset.S_NO_FIELDSET -->
-			{tabs.fieldset.NAME}
-			<!-- ELSE -->
-			<fieldset class="settings" class="settings gr_{tabs.fieldset.ID}">
+
+			<fieldset class="settings gr_{tabs.fieldset.ID}">
 				<legend>{tabs.fieldset.NAME}</legend>
 				<!-- BEGIN field -->
 				<dl>
+					<!-- IF tabs.fieldset.field.S_NO_DIVIDER -->
+					{tabs.fieldset.field.NAME}
+					<!-- ELSE -->
 					<dt><label>{tabs.fieldset.field.NAME} <!-- IF tabs.fieldset.field.REQUIRED -->*<!-- ENDIF --></label>
 					<br /><span>{tabs.fieldset.field.HELP}</span>
 					</dt>
 					<dd>{tabs.fieldset.field.FIELD}</dd>
+					<!-- ENDIF -->
 				</dl>
 				<!-- END field -->
 			</fieldset>
 			
-			<!-- ENDIF -->
+
 			<!-- END fieldset -->
 		</div>
 		<!-- END tabs -->

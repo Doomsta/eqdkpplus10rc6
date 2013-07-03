@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="plugin" version="1.0.10">
+	<folder>guildrequest</folder>
+	<name>GuildRequest</name>
+	<author>GodMod</author>
+	<authorEmail>godmod@eqdkp-plus.eu</authorEmail>
+	<creationDate>1370243209</creationDate>
+	<copyright>(C)2013 GodMod</copyright>
+	<version>0.1.10</version>
+	<level>stable</level>
+	<description>Handles Guild Applications</description>
+</install>

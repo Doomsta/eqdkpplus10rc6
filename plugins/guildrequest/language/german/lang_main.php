@@ -75,6 +75,7 @@ $lang = array(
   'gr_send_notification_mails'		=> 'Benachrichtigungs-Email bei neuer Bewerbung senden',
   'gr_closed'						=> 'Die Bewerbung wurde geschlossen.',
   'gr_notification_subject'			=> 'Neue Bewerbung',
+  'gr_jgrowl_notifications'			=> 'PopUp-Benachrichtigungen anzeigen',
 );
 
 ?>
