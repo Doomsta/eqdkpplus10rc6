@@ -272,6 +272,7 @@ class charImporter extends page_generic {
 			// Load the Armory Data
 			$this->game->obj['armory']->setSettings(array('loc'=>$isServerLoc));
 			$chardata	= $this->game->obj['armory']->character($isMemberName, $isServerName, true);
+			$isMemberName	= $this->firstbig($isMemberName); 
 
 			// Basics
 			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'member_id','value'=>$isindatabase));
@@ -402,6 +403,12 @@ class charImporter extends page_generic {
 			'template_file'		=> 'importer.html',
 			'display'			=> true
 		));
+	}
+	function firstbig($str)
+	{
+		$first = substr($str, 0,1);
+		$string = strtoupper($first).substr($str, 1);
+		return $string;
 	}
 }
 if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_charImporter', charImporter::__shortcuts());
